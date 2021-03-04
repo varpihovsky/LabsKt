@@ -7,6 +7,8 @@ fun main() {
     val subscriber = Subscriber.load()
     println(subscriber)
     subscriber.topUp()
+    println(subscriber.balance)
+    //subscriber.balance = 0 Error
     println(subscriber)
 }
 
@@ -26,17 +28,23 @@ data class TariffPlan(val smsCost: Float, val phoneCost: Float, val phoneToOther
 data class Subscriber(
     val mobilePhone: String,
     var tariffPlanName: String,
-    private var balance: Float,
+    private var account: Float,
     var tariffPlan: TariffPlan
 ) {
-    fun getBalance() = balance
+    val balance: Float
+        get() = account
 
     fun topUp() {
-        balance += 20
+        account += 20
     }
 
     fun topUpOnValue(value: Float) {
-        balance += value
+        account += value
+    }
+
+    override fun toString(): String {
+        return "Subscriber(mobilePhone=$mobilePhone, tariffPlanName=$tariffPlanName, balance=$balance," +
+                " tariffPlan=$tariffPlan"
     }
 
     companion object {

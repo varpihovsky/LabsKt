@@ -9,6 +9,4 @@ fun main(args: Array<String>) {
     println(subscriber3)
 }
 
-data class Subscriber(var mobilePhone: String, var tariff: String){
-    constructor() : this("000", "tariff00")
-}
+data class Subscriber(var mobilePhone: String = "000", var tariff: String = "tariff0")

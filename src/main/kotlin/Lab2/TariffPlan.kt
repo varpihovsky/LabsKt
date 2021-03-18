@@ -4,12 +4,12 @@ import java.io.File
 import java.util.*
 
 fun main() {
-    val subscriber = Subscriber.load()
-    println(subscriber)
-    subscriber.topUp()
-    println(subscriber.balance)
-    //subscriber.balance = 0 Error
-    println(subscriber)
+    Subscriber.load().run {
+        println(this)
+        topUp()
+        println(balance)
+        println(this)
+    }
 }
 
 data class TariffPlan(val smsCost: Float, val phoneCost: Float, val phoneToOthersCost: Float) {
@@ -42,36 +42,23 @@ data class Subscriber(
         account += value
     }
 
-    override fun toString(): String {
-        return "Subscriber(mobilePhone=$mobilePhone, tariffPlanName=$tariffPlanName, balance=$balance," +
-                " tariffPlan=$tariffPlan"
-    }
-
     companion object {
         fun load(pathToSubscriber: String = "a1.txt", pathToTariffPlan: String = "a2.txt"): Subscriber {
-            val scanner = Scanner(File(pathToSubscriber))
-            return Subscriber(
-                scanner.getNextLineOrNull() ?: "",
-                scanner.getNextLineOrNull() ?: "",
-                scanner.getNextFloatOrNull() ?: 0f,
-                TariffPlan.load(pathToTariffPlan)
-            )
+            Scanner(File(pathToSubscriber)).let {
+                return Subscriber(
+                    it.getNextLineOrNull() ?: "",
+                    it.getNextLineOrNull() ?: "",
+                    it.getNextFloatOrNull() ?: 0f,
+                    TariffPlan.load(pathToTariffPlan)
+                )
+            }
         }
     }
 }
 
-fun Scanner.getNextLineOrNull(): String? = this.let {
-    if (it.hasNextLine()) {
-        it.nextLine()
-    } else {
-        null
-    }
-}
+fun Scanner.getNextLineOrNull(): String? =
+    if (hasNextLine()) nextLine() else null
 
-fun Scanner.getNextFloatOrNull(): Float? = this.let {
-    if (it.hasNextLine()) {
-        it.nextLine().toFloatOrNull()
-    } else {
-        null
-    }
-}
+
+fun Scanner.getNextFloatOrNull(): Float? =
+    if (hasNextLine()) nextLine().toFloatOrNull() else null

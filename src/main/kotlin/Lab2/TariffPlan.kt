@@ -25,22 +25,26 @@ data class TariffPlan(val smsCost: Float, val phoneCost: Float, val phoneToOther
     }
 }
 
-data class Subscriber(
+open class Subscriber(
     val mobilePhone: String,
     var tariffPlanName: String,
-    private var account: Float,
+    account: Float,
     var tariffPlan: TariffPlan
 ) {
-    val balance: Float
-        get() = account
+    var balance: Float = account
+        protected set
 
     fun topUp() {
-        account += 20
+        balance += 20
     }
 
     fun topUpOnValue(value: Float) {
-        account += value
+        balance += value
     }
+
+    override fun toString(): String =
+        "Subscriber(mobilePhone='$mobilePhone', tariffPlanName='$tariffPlanName', tariffPlan=$tariffPlan, balance=$balance)"
+
 
     companion object {
         fun load(pathToSubscriber: String = "a1.txt", pathToTariffPlan: String = "a2.txt"): Subscriber {
